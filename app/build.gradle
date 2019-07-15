@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
@@ -29,4 +33,24 @@ dependencies {
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+
+    // Dagger2 core
+    implementation 'com.google.dagger:dagger:2.22'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.22'
+
+    // Dagger Android
+    implementation 'com.google.dagger:dagger-android:2.22'
+    implementation 'com.google.dagger:dagger-android-support:2.22'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.22'
+
+
+    // ViewModel and LiveData
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha03'
+
+    //butter-knife
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+
+    // Reactive Streams (convert Observable to LiveData)
+    implementation 'android.arch.lifecycle:reactivestreams:1.1.1'
 }

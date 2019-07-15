@@ -5,8 +5,8 @@ import ir.aamnapm.retrofitsamples.rerofitUtils.MyCall;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-public interface Api {
+public interface MainApi {
+
     @GET("/users/{id}")
-//    @GET("/ip")
     MyCall<GetDataResponse> getIp(@Path("id") int id);
 }
