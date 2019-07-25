@@ -51,12 +51,14 @@ public class MyCallAdapter<T> implements MyCall<T> {
             public void onFailure(Call<T> call, Throwable t) {
                 // TODO if 'callbackExecutor' is not null, the 'callback' methods should be executed
                 // on that executor by submitting a Runnable. This is left as an exercise for the reader.
+                callbackExecutor.execute(() -> {
 
-                if (t instanceof IOException) {
-                    callback.networkError((IOException) t);
-                } else {
-                    callback.unexpectedError(t);
-                }
+                    if (t instanceof IOException) {
+                        callback.networkError((IOException) t);
+                    } else {
+                        callback.unexpectedError(t);
+                    }
+                });
             }
         });
     }
