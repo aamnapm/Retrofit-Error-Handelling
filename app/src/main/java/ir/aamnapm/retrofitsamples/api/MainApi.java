@@ -1,12 +1,13 @@
 package ir.aamnapm.retrofitsamples.api;
 
+import com.aamnapm.aamnapmretrofit.CustomCall;
+
 import ir.aamnapm.retrofitsamples.model.GetDataResponse;
-import ir.aamnapm.retrofitsamples.rerofitUtils.MyCall;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface MainApi {
 
     @GET("/users/{id}")
-    MyCall<GetDataResponse> getIp(@Path("id") int id);
+    CustomCall<GetDataResponse> getIp(@Path("id") int id);
 }

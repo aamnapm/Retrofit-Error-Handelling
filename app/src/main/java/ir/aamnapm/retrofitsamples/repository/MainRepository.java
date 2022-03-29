@@ -2,19 +2,20 @@ package ir.aamnapm.retrofitsamples.repository;
 
 import android.util.Log;
 
+import com.aamnapm.aamnapmretrofit.RetrofitInstance;
+import com.aamnapm.aamnapmretrofit.CallBackApi;
+import com.aamnapm.aamnapmretrofit.CustomCallback;
+import com.aamnapm.aamnapmretrofit.CustomCall;
+
 import java.io.IOException;
 
-import ir.aamnapm.retrofitsamples.CallBackApi;
 import ir.aamnapm.retrofitsamples.api.MainApi;
-import ir.aamnapm.retrofitsamples.di.module.AppModule;
 import ir.aamnapm.retrofitsamples.model.GetDataResponse;
-import ir.aamnapm.retrofitsamples.rerofitUtils.MyCall;
-import ir.aamnapm.retrofitsamples.rerofitUtils.MyCallback;
 import retrofit2.Response;
 
 public class MainRepository {
 
-    private MyCall<GetDataResponse> getApi;
+    private CustomCall<GetDataResponse> getApi;
 
     public void cancel() {
         if (getApi == null) {
@@ -26,9 +27,9 @@ public class MainRepository {
 
     public void callRemoteApi(final CallBackApi<GetDataResponse> callBackApi) {
         Log.e("MainRepository", "callRemoteApi ");
-        getApi = AppModule.provideRetrofitInstance().create(MainApi.class).getIp(5);
+        getApi = RetrofitInstance.provideRetrofitInstance().create(MainApi.class).getIp(5);
 
-        getApi.enqueue(new MyCallback<>() {
+        getApi.enqueue(new CustomCallback<>() {
             @Override
             public void success(int code, Response<GetDataResponse> response) {
                 Log.e("MainRepository", "SUCCESS! ");
