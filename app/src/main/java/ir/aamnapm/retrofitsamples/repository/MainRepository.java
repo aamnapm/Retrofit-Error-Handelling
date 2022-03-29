@@ -4,10 +4,9 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
-
 import ir.aamnapm.retrofitsamples.CallBackApi;
 import ir.aamnapm.retrofitsamples.api.MainApi;
+import ir.aamnapm.retrofitsamples.di.module.AppModule;
 import ir.aamnapm.retrofitsamples.model.GetDataResponse;
 import ir.aamnapm.retrofitsamples.rerofitUtils.MyCall;
 import ir.aamnapm.retrofitsamples.rerofitUtils.MyCallback;
@@ -15,41 +14,43 @@ import retrofit2.Response;
 
 public class MainRepository {
 
-    private MainApi mainApi;
+    private MyCall<GetDataResponse> getApi;
 
-    @Inject
-    public MainRepository(MainApi mainApi) {
-        this.mainApi = mainApi;
+    public void cancel() {
+        if (getApi == null) {
+            Log.e("MainRepository", "Before init your api, you cannot cancel it.");
+            return;
+        }
+        getApi.cancel();
     }
 
-
-    public void callRemoteApi(final CallBackApi callBackApi) {
+    public void callRemoteApi(final CallBackApi<GetDataResponse> callBackApi) {
         Log.e("MainRepository", "callRemoteApi ");
-        final MyCall<GetDataResponse> dataResponseMyCall = mainApi.getIp(5);
+        getApi = AppModule.provideRetrofitInstance().create(MainApi.class).getIp(5);
 
-        dataResponseMyCall.enqueue(new MyCallback<GetDataResponse>() {
+        getApi.enqueue(new MyCallback<>() {
             @Override
-            public void success(Response<GetDataResponse> response) {
-                Log.e("MainRepository", "SUCCESS! " + response.body().getEmail());
-                callBackApi.onSuccess(response.body());
+            public void success(int code, Response<GetDataResponse> response) {
+                Log.e("MainRepository", "SUCCESS! ");
+                callBackApi.onSuccess(code, response.body());
             }
 
             @Override
-            public void unauthenticated(Response<?> response) {
+            public void unauthenticated(int code, Response<?> response) {
                 Log.e("MainRepository", "UNAUTHENTICATED");
-                callBackApi.unAuthenticated(response.errorBody());
+                callBackApi.unAuthenticated(code, response.errorBody());
             }
 
             @Override
-            public void clientError(Response<?> response) {
+            public void clientError(int code, Response<?> response) {
                 Log.e("MainRepository", "CLIENT ERROR " + response.code() + " " + response.message());
-                callBackApi.clientError(response.code());
+                callBackApi.clientError(code, response.code());
             }
 
             @Override
-            public void serverError(Response<?> response) {
+            public void serverError(int code, Response<?> response) {
                 Log.e("MainRepository", "SERVER ERROR " + response.code() + " " + response.message());
-                callBackApi.serverError(response);
+                callBackApi.serverError(code, response);
             }
 
             @Override

@@ -1,17 +1,39 @@
 package ir.aamnapm.retrofitsamples;
 
-public interface CallBackApi {
+public interface CallBackApi<T> {
 
-    void onSuccess(Object obj);
+    /**
+     * @param statusCode Http status code
+     * @param obj        Generic
+     */
+    void onSuccess(int statusCode, T obj);
 
-    void serverError(Object obj);
+    /**
+     * @param statusCode Http status code
+     * @param obj        Object
+     */
+    void serverError(int statusCode, Object obj);
 
+    /**
+     * @param obj Object
+     */
     void networkError(Object obj);
 
-    void unAuthenticated(Object obj);
+    /**
+     * @param statusCode Http status code
+     * @param obj        Object
+     */
+    void unAuthenticated(int statusCode, Object obj);
 
-    void clientError(int statusCode);
+    /**
+     * @param statusCode Http status code
+     * @param obj        Object
+     */
+    void clientError(int statusCode, Object obj);
 
+    /**
+     * @param obj Object
+     */
     void unexpectedError(Object obj);
 
 }

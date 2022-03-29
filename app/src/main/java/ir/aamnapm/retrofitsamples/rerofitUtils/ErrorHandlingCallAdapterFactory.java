@@ -1,5 +1,6 @@
 package ir.aamnapm.retrofitsamples.rerofitUtils;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.lang.annotation.Annotation;
@@ -12,10 +13,11 @@ import retrofit2.CallAdapter;
 import retrofit2.Retrofit;
 
 public class ErrorHandlingCallAdapterFactory extends CallAdapter.Factory {
+
     @Override
     public @Nullable
     CallAdapter<?, ?> get(
-            Type returnType, Annotation[] annotations, Retrofit retrofit) {
+            @NonNull Type returnType, @NonNull Annotation[] annotations, @NonNull Retrofit retrofit) {
         if (getRawType(returnType) != MyCall.class) {
             return null;
         }
@@ -37,13 +39,15 @@ public class ErrorHandlingCallAdapterFactory extends CallAdapter.Factory {
             this.callbackExecutor = callbackExecutor;
         }
 
+        @NonNull
         @Override
         public Type responseType() {
             return responseType;
         }
 
+        @NonNull
         @Override
-        public MyCall<R> adapt(Call<R> call) {
+        public MyCall<R> adapt(@NonNull Call<R> call) {
             return new MyCallAdapter<>(call, callbackExecutor);
         }
     }

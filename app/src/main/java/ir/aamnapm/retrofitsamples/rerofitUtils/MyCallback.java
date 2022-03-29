@@ -7,32 +7,48 @@ import retrofit2.Response;
 public interface MyCallback<T> {
 
     /**
-     * Called for [200, 300) responses.
+     * <h3>Called for (200, 300) responses.</h3>
+     *
+     * @param code     Http status code
+     * @param response Api response
      */
-    void success(Response<T> response);
+    void success(int code, Response<T> response);
 
     /**
-     * Called for 401 responses.
+     * <h3>Called for 401 responses.</h3>
+     *
+     * @param code     Http status code
+     * @param response Api response
      */
-    void unauthenticated(Response<?> response);
+    void unauthenticated(int code, Response<?> response);
 
     /**
-     * Called for [400, 500) responses, except 401.
+     * <h3>Called for (400, 500) responses, <b>except 401</b>.</h3>
+     *
+     * @param code     Http status code
+     * @param response Api response
      */
-    void clientError(Response<?> response);
+    void clientError(int code, Response<?> response);
 
     /**
-     * Called for [500, 600) response.
+     * <h3>Called for (500, 600) response.</h3>
+     *
+     * @param code     Http status code
+     * @param response Api response
      */
-    void serverError(Response<?> response);
+    void serverError(int code, Response<?> response);
 
     /**
-     * Called for network errors while making the call.
+     * <h3>Called for network errors while making the call.</h3>
+     *
+     * @param e IOException
      */
     void networkError(IOException e);
 
     /**
-     * Called for unexpected errors while making the call.
+     * <h3>Called for unexpected errors while making the call.</h3>
+     *
+     * @param t Throwable
      */
     void unexpectedError(Throwable t);
 

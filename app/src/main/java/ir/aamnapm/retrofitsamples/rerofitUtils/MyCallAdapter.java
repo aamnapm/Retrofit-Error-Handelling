@@ -1,5 +1,7 @@
 package ir.aamnapm.retrofitsamples.rerofitUtils;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 import java.util.concurrent.Executor;
 
@@ -24,9 +26,9 @@ public class MyCallAdapter<T> implements MyCall<T> {
 
     @Override
     public void enqueue(final MyCallback<T> callback) {
-        call.enqueue(new Callback<T>() {
+        call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<T> call, Response<T> response) {
+            public void onResponse(@NonNull Call<T> call, @NonNull Response<T> response) {
                 // TODO if 'callbackExecutor' is not null, the 'callback' methods should be executed
                 // on that executor by submitting a Runnable. This is left as an exercise for the reader.
 
@@ -34,13 +36,13 @@ public class MyCallAdapter<T> implements MyCall<T> {
                 callbackExecutor.execute(() -> {
 
                     if (code >= 200 && code < 300) {
-                        callback.success(response);
+                        callback.success(code, response);
                     } else if (code == 401) {
-                        callback.unauthenticated(response);
+                        callback.unauthenticated(code, response);
                     } else if (code >= 400 && code < 500) {
-                        callback.clientError(response);
+                        callback.clientError(code, response);
                     } else if (code >= 500 && code < 600) {
-                        callback.serverError(response);
+                        callback.serverError(code, response);
                     } else {
                         callback.unexpectedError(new RuntimeException("Unexpected response " + response));
                     }
@@ -48,7 +50,7 @@ public class MyCallAdapter<T> implements MyCall<T> {
             }
 
             @Override
-            public void onFailure(Call<T> call, Throwable t) {
+            public void onFailure(@NonNull Call<T> call, @NonNull Throwable t) {
                 // TODO if 'callbackExecutor' is not null, the 'callback' methods should be executed
                 // on that executor by submitting a Runnable. This is left as an exercise for the reader.
                 callbackExecutor.execute(() -> {
@@ -63,6 +65,7 @@ public class MyCallAdapter<T> implements MyCall<T> {
         });
     }
 
+    @NonNull
     @Override
     public MyCall<T> clone() {
         return new MyCallAdapter<>(call.clone(), callbackExecutor);
