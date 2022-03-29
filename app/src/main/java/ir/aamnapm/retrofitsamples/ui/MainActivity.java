@@ -5,25 +5,18 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
-import javax.inject.Inject;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dagger.android.support.DaggerAppCompatActivity;
 import ir.aamnapm.retrofitsamples.R;
-import ir.aamnapm.retrofitsamples.di.config.ViewModelProviderFactory;
 import ir.aamnapm.retrofitsamples.model.GetDataResponse;
 
-public class MainActivity extends DaggerAppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private MainViewModel mainViewModel;
-
-    @Inject
-    ViewModelProviderFactory viewModelProviderFactory;
 
 
     @BindView(R.id.btnStart)
@@ -33,10 +26,12 @@ public class MainActivity extends DaggerAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        mainViewModel = ViewModelProviders.of(this, viewModelProviderFactory).get(MainViewModel.class);
+
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         attachObserverLogin();
     }
@@ -45,26 +40,18 @@ public class MainActivity extends DaggerAppCompatActivity {
     public void btnCallApi() {
         Log.e("MainActivity", "btnStart ");
         mainViewModel.callRemoteData();
-
-        mainViewModel.getLiveDataRemote().observe(this,
-                new Observer<GetDataResponse>() {
-                    @Override
-                    public void onChanged(GetDataResponse getDataResponse) {
-                        Log.e("Activity", "" + getDataResponse.getUsername());
-                    }
-                });
     }
 
 
     private void attachObserverLogin() {
-//        mainViewModel.getApiNetworkErrorLiveData().observe(this, this::network);
-//        mainViewModel.getApiServerErrorLiveData().observe(this, this::serverError);
-//        mainViewModel.getApiNotFoundErrorLiveData().observe(this, this::notFound);
-//        mainViewModel.getApiForbiddenErrorLiveData().observe(this, this::forbidden);
-//        mainViewModel.getApiValidationErrorLiveData().observe(this, this::validation);
-//        mainViewModel.getApiBadRequestErrorLiveData().observe(this, this::badRequest);
-//        mainViewModel.getApiAuthFailureErrorLiveData().observe(this, this::authFailure);
-//        mainViewModel.getApiSuccessLiveDataResponse().observe(this, this::responseLoginApi);
+        mainViewModel.getApiNetworkErrorLiveData().observe(this, this::network);
+        mainViewModel.getApiServerErrorLiveData().observe(this, this::serverError);
+        mainViewModel.getApiNotFoundErrorLiveData().observe(this, this::notFound);
+        mainViewModel.getApiForbiddenErrorLiveData().observe(this, this::forbidden);
+        mainViewModel.getApiValidationErrorLiveData().observe(this, this::validation);
+        mainViewModel.getApiBadRequestErrorLiveData().observe(this, this::badRequest);
+        mainViewModel.getApiAuthFailureErrorLiveData().observe(this, this::authFailure);
+        mainViewModel.getApiSuccessLiveDataResponse().observe(this, this::responseLoginApi);
     }
 
     private void authFailure(String s) {
