@@ -1,10 +1,10 @@
-package ir.aamnapm.retrofitsamples.rerofitUtils;
+package com.aamnapm.aamnapmretrofit;
 
 import java.io.IOException;
 
 import retrofit2.Response;
 
-public interface MyCallback<T> {
+public interface CustomCallback<T> {
 
     /**
      * <h3>Called for (200, 300) responses.</h3>

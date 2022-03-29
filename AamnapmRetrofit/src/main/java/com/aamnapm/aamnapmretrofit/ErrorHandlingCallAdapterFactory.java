@@ -1,4 +1,4 @@
-package ir.aamnapm.retrofitsamples.rerofitUtils;
+package com.aamnapm.aamnapmretrofit;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +18,7 @@ public class ErrorHandlingCallAdapterFactory extends CallAdapter.Factory {
     public @Nullable
     CallAdapter<?, ?> get(
             @NonNull Type returnType, @NonNull Annotation[] annotations, @NonNull Retrofit retrofit) {
-        if (getRawType(returnType) != MyCall.class) {
+        if (getRawType(returnType) != CustomCall.class) {
             return null;
         }
         if (!(returnType instanceof ParameterizedType)) {
@@ -30,7 +30,7 @@ public class ErrorHandlingCallAdapterFactory extends CallAdapter.Factory {
         return new ErrorHandlingCallAdapter<>(responseType, callbackExecutor);
     }
 
-    private static final class ErrorHandlingCallAdapter<R> implements CallAdapter<R, MyCall<R>> {
+    private static final class ErrorHandlingCallAdapter<R> implements CallAdapter<R, CustomCall<R>> {
         private final Type responseType;
         private final Executor callbackExecutor;
 
@@ -47,8 +47,8 @@ public class ErrorHandlingCallAdapterFactory extends CallAdapter.Factory {
 
         @NonNull
         @Override
-        public MyCall<R> adapt(@NonNull Call<R> call) {
-            return new MyCallAdapter<>(call, callbackExecutor);
+        public CustomCall<R> adapt(@NonNull Call<R> call) {
+            return new CustomCallAdapter<>(call, callbackExecutor);
         }
     }
 }

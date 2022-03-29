@@ -1,4 +1,4 @@
-package ir.aamnapm.retrofitsamples.rerofitUtils;
+package com.aamnapm.aamnapmretrofit;
 
 import androidx.annotation.NonNull;
 
@@ -9,12 +9,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MyCallAdapter<T> implements MyCall<T> {
+public class CustomCallAdapter<T> implements CustomCall<T> {
 
     private final Call<T> call;
     private final Executor callbackExecutor;
 
-    MyCallAdapter(Call<T> call, Executor callbackExecutor) {
+    public CustomCallAdapter(Call<T> call, Executor callbackExecutor) {
         this.call = call;
         this.callbackExecutor = callbackExecutor;
     }
@@ -25,8 +25,8 @@ public class MyCallAdapter<T> implements MyCall<T> {
     }
 
     @Override
-    public void enqueue(final MyCallback<T> callback) {
-        call.enqueue(new Callback<>() {
+    public void enqueue(final CustomCallback<T> callback) {
+        call.enqueue(new Callback<T>() {
             @Override
             public void onResponse(@NonNull Call<T> call, @NonNull Response<T> response) {
                 // TODO if 'callbackExecutor' is not null, the 'callback' methods should be executed
@@ -67,8 +67,8 @@ public class MyCallAdapter<T> implements MyCall<T> {
 
     @NonNull
     @Override
-    public MyCall<T> clone() {
-        return new MyCallAdapter<>(call.clone(), callbackExecutor);
+    public CustomCall<T> clone() {
+        return new CustomCallAdapter<>(call.clone(), callbackExecutor);
     }
 
 }
