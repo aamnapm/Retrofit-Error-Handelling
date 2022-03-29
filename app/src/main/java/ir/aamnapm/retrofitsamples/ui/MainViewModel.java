@@ -2,12 +2,8 @@ package ir.aamnapm.retrofitsamples.ui;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import javax.inject.Inject;
 
 import ir.aamnapm.retrofitsamples.CallBackApi;
 import ir.aamnapm.retrofitsamples.model.GetDataResponse;
@@ -15,8 +11,6 @@ import ir.aamnapm.retrofitsamples.repository.MainRepository;
 
 public class MainViewModel extends ViewModel {
 
-    private MainRepository mainRepository;
-/*
     private MutableLiveData<GetDataResponse> apiSuccessLiveDataResponse;
 
     private MutableLiveData<Object> apiServerErrorLiveData;
@@ -28,6 +22,17 @@ public class MainViewModel extends ViewModel {
     private MutableLiveData<String> apiBadRequestErrorLiveData;
     private MutableLiveData<String> apiAuthFailureErrorLiveData;
 
+    {
+        apiServerErrorLiveData = new MutableLiveData<>();
+        apiNetworkErrorLiveData = new MutableLiveData<>();
+        apiNotFoundErrorLiveData = new MutableLiveData<>();
+        apiForbiddenErrorLiveData = new MutableLiveData<>();
+        apiValidationErrorLiveData = new MutableLiveData<>();
+        apiSuccessLiveDataResponse = new MutableLiveData<>();
+        apiBadRequestErrorLiveData = new MutableLiveData<>();
+        apiUnexpectedErrorLiveData = new MutableLiveData<>();
+        apiAuthFailureErrorLiveData = new MutableLiveData<>();
+    }
 
     public MainRepository getMainRepository() {
         return mainRepository;
@@ -108,79 +113,56 @@ public class MainViewModel extends ViewModel {
     public void setApiAuthFailureErrorLiveData(MutableLiveData<String> apiAuthFailureErrorLiveData) {
         this.apiAuthFailureErrorLiveData = apiAuthFailureErrorLiveData;
     }
-*/
 
-    MediatorLiveData<GetDataResponse> remoteLiveData = new MediatorLiveData<>();
 
-    @Inject
-    public MainViewModel(MainRepository mainRepository) {
-
-        this.mainRepository = mainRepository;
-
-       /* apiServerErrorLiveData = new MutableLiveData<>();
-        apiNetworkErrorLiveData = new MutableLiveData<>();
-        apiNotFoundErrorLiveData = new MutableLiveData<>();
-        apiForbiddenErrorLiveData = new MutableLiveData<>();
-        apiValidationErrorLiveData = new MutableLiveData<>();
-        apiSuccessLiveDataResponse = new MutableLiveData<>();
-        apiBadRequestErrorLiveData = new MutableLiveData<>();
-        apiUnexpectedErrorLiveData = new MutableLiveData<>();
-        apiAuthFailureErrorLiveData = new MutableLiveData<>();*/
-    }
+    private MainRepository mainRepository;
 
     public void callRemoteData() {
+        mainRepository = new MainRepository();
         Log.e("MainViewModel", "callRemoteApi ");
-        mainRepository.callRemoteApi(new CallBackApi() {
+        mainRepository.callRemoteApi(new CallBackApi<>() {
             @Override
-            public void onSuccess(Object obj) {
+            public void onSuccess(int code, GetDataResponse obj) {
                 Log.e("MainViewModel", "(GetDataResponse) obj " + ((GetDataResponse) obj).getUsername());
-//                apiSuccessLiveDataResponse.setValue((GetDataResponse) obj);
-                remoteLiveData.addSource((LiveData<GetDataResponse>) obj, new Observer<GetDataResponse>() {
-                    @Override
-                    public void onChanged(GetDataResponse getDataResponse) {
-                        remoteLiveData.setValue(getDataResponse);
-                    }
-                });
+
+                GetDataResponse data = (GetDataResponse) obj;
+                apiSuccessLiveDataResponse.postValue(data);
             }
 
             @Override
-            public void unAuthenticated(Object obj) {
-//                apiAuthFailureErrorLiveData.setValue("AuthFailureError");
+            public void unAuthenticated(int code, Object obj) {
+                apiAuthFailureErrorLiveData.setValue("AuthFailureError");
             }
 
             @Override
-            public void clientError(int statusCode) {
+            public void clientError(int statusCode, Object obj) {
                 switch (statusCode) {
                     case 403:
-//                        apiForbiddenErrorLiveData.setValue("");
+                        apiForbiddenErrorLiveData.setValue("");
                         break;
                     case 404:
-//                        apiNotFoundErrorLiveData.setValue("");
+                        apiNotFoundErrorLiveData.setValue("");
                         break;
                     case 400:
-//                        apiBadRequestErrorLiveData.setValue("");
+                        apiBadRequestErrorLiveData.setValue("");
                         break;
                 }
             }
 
             @Override
-            public void serverError(Object obj) {
-//                apiServerErrorLiveData.setValue(obj);
+            public void serverError(int code, Object obj) {
+                apiServerErrorLiveData.setValue(obj);
             }
 
             @Override
             public void networkError(Object obj) {
-//                apiNetworkErrorLiveData.setValue(obj);
+                apiNetworkErrorLiveData.setValue(obj);
             }
 
             @Override
             public void unexpectedError(Object obj) {
-//                apiUnexpectedErrorLiveData.setValue(obj);
+                apiUnexpectedErrorLiveData.setValue(obj);
             }
         });
-    }
-
-    public LiveData<GetDataResponse> getLiveDataRemote() {
-        return remoteLiveData;
     }
 }
