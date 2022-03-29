@@ -1,4 +1,4 @@
-package ir.aamnapm.retrofitsamples;
+package com.aamnapm.aamnapmretrofit;
 
 public interface CallBackApi<T> {
 

@@ -5,7 +5,8 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import ir.aamnapm.retrofitsamples.CallBackApi;
+import com.aamnapm.aamnapmretrofit.CallBackApi;
+
 import ir.aamnapm.retrofitsamples.model.GetDataResponse;
 import ir.aamnapm.retrofitsamples.repository.MainRepository;
 

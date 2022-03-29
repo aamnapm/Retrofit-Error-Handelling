@@ -1,4 +1,4 @@
-package ir.aamnapm.retrofitsamples.di.config;
+package com.aamnapm.aamnapmretrofit;
 
 
 import androidx.annotation.NonNull;
